@@ -26,9 +26,10 @@ Startlensプロジェクトにおける開発環境の構築
 
 AWSでの環境設定と起動方法
 ======================
-:Ubuntu:            18.04
-:インスタンスタイプ:   t2.micro
+:Ubuntu:    18.04
+:インスタンスタイプ:    t2.micro
 
+EC2インスタンス内での実行手順
     #. sudo apt -y update
     #. sudo apt -y upgrade
     #. sudo apt -y install build-essential python3-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 tk-dev zip libssl-dev
