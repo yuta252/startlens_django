@@ -21,7 +21,7 @@ Startlensプロジェクトにおける開発環境の構築
     #. $ python3.6 -m venv venv
     #. $ source venv/bin/activate
     #. (venv) $ pip install -r requirements/text.txt
-    #. (venv) $ python3.6 manage.py runserver
+    #. (venv) $ python3.6 manage.py runserver --settings config.settings.text
 
 
 AWSでの環境設定と起動方法
@@ -30,6 +30,7 @@ AWSでの環境設定と起動方法
 :インスタンスタイプ:    t2.micro
 
 EC2インスタンス内での実行手順
+
     #. sudo apt -y update
     #. sudo apt -y upgrade
     #. sudo apt -y install build-essential python3-dev libsqlite3-dev libreadline6-dev libgdbm-dev zlib1g-dev libbz2-dev sqlite3 tk-dev zip libssl-dev
