@@ -1,0 +1,174 @@
+{% extends 'analysis/base.html' %}
+{% load static %}
+
+{% block title %}
+プロフィールの変更
+{% endblock %}
+
+{% block content %}
+<div class="mypage_content_wrapper">
+    <form method="post" action="" enctype="multipart/form-data">
+    <div class="row">
+        {% csrf_token %}
+        <div class="col-8">
+            <div class="row">
+                <div class="col-4 profile-edit-title">
+                    <span>プロフィールの編集</span>
+                </div>
+                <div class="col-4 offset-4">
+                    <button type="submit" class="btn btn-info profile-edit">保存</button>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-4 pl-5">
+                    <div class="form_thumbnail" style="display: none;">
+                        {{ form.thumbnail }}
+                    </div>
+                    <div class="row mx-0 mb-2 user-image-group">
+                        <!--　ここに画像をプレビュー　-->
+                        <img id="file_loader" class="button thumbnail img-fluid" src="{{ user.thumbnail_resized.url }}" alt=""/>
+                    </div>
+                    <div class="user-image-btn-wrapper">
+                        <div class="btn btn-primary mx-4 user-image-btn">
+                            画像をアップロード
+                        </div>
+                    </div>
+                </div>
+                <div class="col-8">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row" class="pl-0">事業者名</th>
+                                <td>{{ form.username }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="pl-0">登録メールアドレス</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row" class="pl-0">電話番号</th>
+                                <td>{{ form.telephone }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <table class="table mypage_detail_table">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">言語</th>
+                        <td class="mypage_detail_content">日本語</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">分類項目</th>
+                        <td class="mypage_detail_content">{{ form.major_category }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">説明</th>
+                        <td class="mypage_detail_content">{{ form.self_intro }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">所在地</th>
+                        <td class="mypage_detail_content">
+                            {{ form.address_prefecture }}
+                            {{ form.address_city }}
+                            {{ form.address_street }}
+                            <div class="mt-4">
+                                <div class="btn btn-primary geo-get-btn">
+                                    取得
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr style="display: none;">
+                        <th scope="row" class="mypage_detail_title">緯度</th>
+                        <td class="mypage_detail_content">{{ form.latitude }}</td>
+                    </tr>
+                    <tr style="display: none;">
+                        <th scope="row" class="mypage_detail_title">経度</th>
+                        <td class="mypage_detail_content">{{ form.longitude }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">URL</th>
+                        <td class="mypage_detail_content">{{ form.url }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">料金</th>
+                        <td class="mypage_detail_content">{{ form.entrance_fee }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">祝祭日</th>
+                        <td class="mypage_detail_content">{{ form.holiday }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="mypage_detail_title">営業時間</th>
+                        <td class="mypage_detail_content">{{ form.business_hours }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+//画像アップロード時に画像を表示する
+$(function(){
+    $('.user-image-btn').on('click', function(e){
+        e.preventDefault();
+        var inputToUploadUserImage = $(this).parent().prevAll('.form_thumbnail').children('.upload-user-image');
+        var userImageGroup = $(this).parent().prevAll('.user-image-group');
+        console.log(inputToUploadUserImage);
+        console.log(userImageGroup);
+
+        inputToUploadUserImage.click();
+        inputToUploadUserImage.off('change').on('change', function(e){
+            if(e.target.files && e.target.files[0]){
+                var file = e.target.files[0]
+                console.log(file);
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    // 元の画像を削除
+                    userImageGroup.children('#file_loader').remove();
+                    // 追加で選択された画像をプレビュー
+                    userImageGroup.append('<img id="file_loader" class="button thumbnail img-fluid" src="' + e.target.result + '">')
+                };
+                reader.readAsDataURL(file)
+            };
+        })
+    })
+});
+
+// Geocoding APIにより住所から緯度、経度を表示する
+$(function(){
+    $('.geo-get-btn').on('click',function(e){
+        e.preventDefault();
+        var that = this;
+        address_pre = $(that).parent().siblings('.add_pre').val();
+        address_city = $(that).parent().siblings('.add_city').val();
+        address_street = $(that).parent().siblings('.add_street').val();
+
+        api_key = "AIzaSyCCZexIEtU_mcR_GsF_m4BDgNS5nK-TpoQ"
+
+        // AJAX
+        $.ajax({
+            url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + address_pre + "+" + address_city + "+" + address_street + "&key=" + api_key,
+            type: "get",
+            dataType: "json",
+            data:{},
+            success: function(data){
+                $('#latitude').val(data.results[0].geometry.location.lat);
+                $('#longitude').val(data.results[0].geometry.location.lng);
+            },
+        })
+    });
+});
+
+
+
+</script>
+{% endblock %}
