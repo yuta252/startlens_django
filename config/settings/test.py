@@ -3,9 +3,15 @@
 
 """
 from .base import *
+import environ
 
 DEBUG = True
 
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
+
+
+# TODO:　環境変数から読み込む
 ALLOWED_HOSTS = ['*']
 
 # HTTPアクセスを自動的にHTTPSのURLにリダイレクトする
@@ -24,9 +30,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'startlens',
-        'USER': 'root',
-        'PASSWORD': 'Xw8ih2az',
-        'HOST': 'startlens-web-db.cb2k5agjbcut.ap-northeast-1.rds.amazonaws.com',
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
         'PORT': '3306',
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {
