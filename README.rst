@@ -20,8 +20,8 @@ Startlensプロジェクトにおける開発環境の構築
     #. $ cd startlens
     #. $ python3.6 -m venv venv
     #. $ source venv/bin/activate
-    #. (venv) $ pip install -r requirements/text.txt
-    #. (venv) $ python3.6 manage.py runserver --settings config.settings.text
+    #. (venv) $ pip install -r requirements/test.txt
+    #. (venv) $ python3.6 manage.py runserver --settings=config.settings.test
 
 
 AWSでの環境設定と起動方法

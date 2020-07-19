@@ -8,7 +8,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# HTTPアクセスをz自動的にHTTPSのURLにリダイレクトする
+# HTTPアクセスを自動的にHTTPSのURLにリダイレクトする
 # SECURE_SSL_REDIRECT = True
 
 ############
@@ -19,14 +19,14 @@ ALLOWED_HOSTS = ['*']
 ATMIC_REQUESTS: True
 　トランザクションの有効範囲をリクエストの開始から終了までにする
 """
-#TODO: データベース設定の変更
+# TODO: データベース設定の変更
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'startlens',
-        'USER': 'startlensuser',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': 'Xw8ih2az',
+        'HOST': 'startlens-web-db.cb2k5agjbcut.ap-northeast-1.rds.amazonaws.com',
         'PORT': '3306',
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {
