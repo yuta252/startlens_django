@@ -75,9 +75,11 @@ EC2のvenv仮想環境で下記を実行
 Djangoの設定
 ===========
 管理者アカウトを作成する
+
     * python manage.py create superuser
 
 静的ファイルの配置
+
     * sudo mkdir /var/www
     * sudo mkdir /var/www/startlens_django
     * sudo chown ubuntu:www-data /var/www/startlens_django
@@ -90,14 +92,17 @@ Djangoの設定
 :gunicorn:    20.0.4
 
 アプリケーションサーバーとしてgunicornをセットアップする
+
     * pip install gunicorn
     * gunicorn --daemon --bind=0.0.0.0:8000 config.wsgi
 
 デーモンで起動しているgunicornを停止する場合
+
     * sudo lsof -i:8000
     * sudo kill -9 PID
 
 リバースプロキシとしてnginxのインストールと設定
+
     * sudo apt install -y nginx
     * sudo systemctl enable nginx
     * mv config/startlens /etc/nginx/site-available/startlens
