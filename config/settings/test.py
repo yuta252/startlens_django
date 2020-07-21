@@ -5,7 +5,7 @@
 from .base import *
 import environ
 
-DEBUG = True
+DEBUG = False
 
 env = environ.Env()
 env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -16,6 +16,21 @@ ALLOWED_HOSTS = ['*']
 
 # HTTPアクセスを自動的にHTTPSのURLにリダイレクトする
 # SECURE_SSL_REDIRECT = True
+
+########
+# APPS #
+########
+INSTALLED_APPS = [
+    'analysis.apps.AnalysisConfig',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'imagekit',
+    'storages',
+]
 
 ############
 # Database #
@@ -36,7 +51,8 @@ DATABASES = {
         'PORT': '3306',
         'ATOMIC_REQUESTS': True,
         'OPTIONS': {
-            'sql_mode': 'TRADITIONAL, NO_AUTO_VALUE_ON_ZERO',
+            'charset': 'utf8mb4',
+            'sql_mode': 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO',
         }
     }
 }
@@ -49,6 +65,7 @@ STATICFILES_DIRS:アプリケーションに紐づかない静的ファイルの
 STATIC_ROOT: 静的ファイルの配信元（本番環境での配信元）
              DEBUG=Falseの場合runserverは動作しないためSTATIC_ROOTを参照する
              python manage.py collectstaticコマンドで静的ファイルを集約する
+STATIC_STORAGE: 
 """
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = '/var/www/{}/static'.format(PROJECT_NAME)
@@ -59,8 +76,8 @@ STATIC_ROOT = '/var/www/{}/static'.format(PROJECT_NAME)
 """
 AWSのアクセスキーにつき環境変数に組み込む
 """
-AWS_ACCESS_KEY_ID = 'AKIxxxxxxxxx'
-AWS_SECRET_ACCESS_KEY = 'xxxxxxxxxxxxxx'
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 
 ###############
 # Media files #
@@ -68,7 +85,7 @@ AWS_SECRET_ACCESS_KEY = 'xxxxxxxxxxxxxx'
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # 任意の非公開バケット
-AWS_STORAGE_BUCKET_NAME = 'analysis-media-storage'
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
 # バケットのACLに準ずる
 AWS_DEFAULT_ACL = None
 

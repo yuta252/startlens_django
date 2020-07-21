@@ -1,0 +1,17 @@
+server{
+    listen 80;
+    server_name 54.250.16.170;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        alias /var/www/startlens_django/static/;
+    }
+    location /media/ {
+        alias /var/www/startlens_django/static/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://0.0.0.0:8000;
+    }
+}

@@ -1,7 +1,10 @@
 Django==2.2.13
 django-appconf==1.0.4
+django-environ==0.4.5
 django-imagekit==4.0.2
+mysqlclient==2.0.1
 pilkit==2.0
+Pillow==6.2.2
 pytz==2020.1
 six==1.15.0
 sqlparse==0.3.1
