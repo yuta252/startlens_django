@@ -1,3 +1,3 @@
 #!/bin/bash
 source /home/ubuntu/startlens/venv/bin/activate
-python manage.py collectstatic --noinput
+python /home/ubuntu/startlens/startlens_django/manage.py collectstatic --noinput
