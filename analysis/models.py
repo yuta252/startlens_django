@@ -20,25 +20,22 @@ def get_photo_upload_path(self, filename):
     if not os.path.exists(user_dir_path):
         os.makedirs(user_dir_path)
     return user_dir_path + "/" + str(self.id) + '.jpg'
-    # TODO : 本番環境のときpath入れ替え
-    # return "/postpic/" + str(self.exhibit_id.owner.id) + "/" + str(self.exhibit_id.id) + "/" + + str(self.id) + '.jpg'
 
 
 def get_thumbnail_path(self, filename):
     """
         ユーザーごとにthumbnailフォルダパスを変更
     """
-    user_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
+    user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
     if not os.path.exists(user_dir_path):
         os.makedirs(user_dir_path)
     return user_dir_path + "/" + str(self.id) + '.jpg'
-    # TODO : 本番環境のときpath入れ替え
-    # return "/thumbnail/" + str(self.id) + '.jpg'
 
 
 def set_default_thumbnail_path():
     """ユーザー画像のデフォルトのアップロードパス"""
-    file_path = settings.MEDIA_ROOT + "/thumbnail/noimage.png"
+    if not settings.DEBUG:
+        file_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/noimage.png"
     return file_path
 
 
