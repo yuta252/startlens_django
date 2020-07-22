@@ -36,6 +36,12 @@ def get_thumbnail_path(self, filename):
     # return "/thumbnail/" + str(self.id) + '.jpg'
 
 
+def set_default_thumbnail_path():
+    """ユーザー画像のデフォルトのアップロードパス"""
+    file_path = settings.MEDIA_ROOT + "/thumbnail/noimage.png"
+    return file_path
+
+
 def get_userthumbnail_path(self, filename):
     """
         モバイルユーザーごとにthumbnailフォルダパスを変更
@@ -125,7 +131,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('Emailアドレス', unique=True)
     username = models.CharField('ユーザー名', max_length=30, default='', help_text='30文字以内で入力してください。')
     # TODO: default path変更
-    thumbnail = models.ImageField('サムネイル画像', upload_to=get_thumbnail_path, default='./thumbnail/noimage.png')
+    thumbnail = models.ImageField('サムネイル画像', upload_to=get_thumbnail_path, default=set_default_thumbnail_path)
     # imagekitによるCACHEからの画像参照
     thumbnail_resized = ImageSpecField(source='thumbnail', processors=[ResizeToFill(250, 250)], format='JPEG', options={'quality': 60})
 
