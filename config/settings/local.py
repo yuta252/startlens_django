@@ -12,3 +12,11 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+################
+# Static Files #
+################
+"""
+STATICFILES_DIRS:アプリケーションに紐づかない静的ファイルの配置ディレクトリ
+"""
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

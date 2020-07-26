@@ -8,8 +8,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+# from imagekit.models import ImageSpecField
+# from imagekit.processors import ResizeToFill
 
 
 def get_photo_upload_path(self, filename):
@@ -26,16 +26,23 @@ def get_thumbnail_path(self, filename):
     """
         ユーザーごとにthumbnailフォルダパスを変更
     """
-    user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
-    if not os.path.exists(user_dir_path):
-        os.makedirs(user_dir_path)
+    if not settings.DEBUG:
+        user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
+    else:
+        user_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
+        if not os.path.exists(user_dir_path):
+            os.makedirs(user_dir_path)
     return user_dir_path + "/" + str(self.id) + '.jpg'
 
 
 def set_default_thumbnail_path():
-    """ユーザー画像のデフォルトのアップロードパス"""
+    """
+        ユーザー画像のデフォルトのアップロードパス
+    """
     if not settings.DEBUG:
         file_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/noimage.png"
+    else:
+        file_path = './thumbnail/noimage.png'
     return file_path
 
 
@@ -130,7 +137,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # TODO: default path変更
     thumbnail = models.ImageField('サムネイル画像', upload_to=get_thumbnail_path, default=set_default_thumbnail_path)
     # imagekitによるCACHEからの画像参照
-    thumbnail_resized = ImageSpecField(source='thumbnail', processors=[ResizeToFill(250, 250)], format='JPEG', options={'quality': 60})
+    # thumbnail_resized = ImageSpecField(source='thumbnail', processors=[ResizeToFill(250, 250)], format='JPEG', options={'quality': 60})
 
     self_intro = models.CharField('説明文', max_length=2000, default='', help_text='2,000文字以内で入力してください。')
     major_category = models.CharField('カテゴリー分類', max_length=4, choices=MAJOR_FIELD_CHOICE, default='00')
