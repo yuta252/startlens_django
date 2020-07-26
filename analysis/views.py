@@ -28,9 +28,8 @@ logger = logging.getLogger(__name__)
 # Dashboard
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'analysis/dashboard.html'
-    # 403エラー画面を表示する場合は次のコメントアウトを外す
-    raise_exception = True
-    logger.info('logging is tested')
+    # 403エラー画面を表示する場合はTrueに設定する
+    raise_exception = False
 
 
 class UploadView(LoginRequiredMixin, ListView):
