@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo nginx -s reload
+sudo nginx -s stop
