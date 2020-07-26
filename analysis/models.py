@@ -30,9 +30,10 @@ def get_thumbnail_path(self, filename):
         # user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
         user_dir_path = "/thumbnail/" + str(self.id)
     else:
-        user_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
-        if not os.path.exists(user_dir_path):
-            os.makedirs(user_dir_path)
+        media_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
+        if not os.path.exists(media_dir_path):
+            os.makedirs(media_dir_path)
+        user_dir_path = "./thumbnail/" + str(self.id)
     return user_dir_path + "/" + str(self.id) + '.jpg'
 
 
