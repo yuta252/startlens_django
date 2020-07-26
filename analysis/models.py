@@ -27,7 +27,8 @@ def get_thumbnail_path(self, filename):
         ユーザーごとにthumbnailフォルダパスを変更
     """
     if not settings.DEBUG:
-        user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
+        # user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
+        user_dir_path = "/thumbnail/" + str(self.id)
     else:
         user_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
         if not os.path.exists(user_dir_path):
@@ -40,7 +41,8 @@ def set_default_thumbnail_path():
         ユーザー画像のデフォルトのアップロードパス
     """
     if not settings.DEBUG:
-        file_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/noimage.png"
+        # file_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/noimage.png"
+        file_path = "/thumbnail/noimage.png"
     else:
         file_path = './thumbnail/noimage.png'
     return file_path
