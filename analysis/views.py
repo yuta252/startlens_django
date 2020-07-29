@@ -8,6 +8,7 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView,
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
+from django.db import IntegrityError
 from django.db.models import Q
 from django.http import HttpResponseBadRequest
 from django.http.response import HttpResponse
@@ -69,36 +70,47 @@ class UploadView(LoginRequiredMixin, ListView):
 
         if exhibit_form.is_valid():
             exhibit_pk = self.exhibit_form_save(exhibit_form)
+        else:
+            print("exihibit_form.is_valid is not True")
         # TODO: is_valid()エラー時の処理
         if picture_form.is_valid():
             self.picture_form_save(picture_form, exhibit_pk)
+        else:
+            print("picture_form.is_valid is not True")
 
         return self.render_to_response(context)
 
     def exhibit_form_save(self, form):
-        """If is_valid is True, put user info into required owner before saving"""
+        """
+            exibit_formのバリデーションがTrueの場合、対象物を保存してprimarykeyを返す
+        """
         owner = self.request.user
         obj = form.save(commit=False)
         obj.owner = owner
-        # TODO : データベース保存に例外処理追加
-        obj.save()
+        try:
+            obj.save()
+        except IntegrityError as e:
+            logger.info("データベースに登録できませんでした\n user:%s \n error:%s", owner, e)
+        except Exception as e:
+            logger.info("データベースに登録できませんでした\n user:%s \n error:%s", owner, e)
         return obj.id
-        # 保存したobjのモデルpkを取得する
-        # exhibit_pk = obj.id
-        # print(obj.id)
 
     def picture_form_save(self, form, pk):
-        # 複数ファイル保存処理
+        """
+            複数ファイルを保存する処理
+        """
         portfolio_images = self.request.FILES.getlist('picture-post_pic')
-        print(portfolio_images)
         for image in portfolio_images:
-            print(image)
+            logger.info("image: {}".format(image))
             obj = ExhibitPicture()
-            # obj = form.save(commit=False)
             obj.exhibit_id = Exhibit.objects.get(id=pk)
             obj.post_pic = image
-            obj.save()
-            print("success save images{}".format(image))
+            try:
+                obj.save()
+            except IntegrityError as e:
+                logger.info("データベースに登録できませんでした\n Exhibit pk:%s \n error:%s", pk, e)
+            except Exception as e:
+                logger.info("データベースに登録できませんでした\n Exhibit pk:%s \n error:%s", pk, e)
 
 
 class EditView(LoginRequiredMixin, UpdateView):

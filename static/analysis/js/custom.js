@@ -1,4 +1,9 @@
-// Difine JQuery except for AJAX
+// Difine JavaScript except for AJAX
+
+// 画像Upload時のExif情報削除
+
+
+
 
 
 

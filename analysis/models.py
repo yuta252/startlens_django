@@ -14,20 +14,25 @@ from django.utils import timezone
 
 def get_photo_upload_path(self, filename):
     """
-        ユーザーごとにアップロードするフォルダパスを変更
+        本番環境: https://startlens-media-storage.s3-ap-northeast-1.amazonaws.com/postpic/2200001/12/ae952293-0601-4706-b0d_ubQ7cdA.jpg
+        開発環境: setting.MEDIA_ROOT/postpic/2200001/12/ae952293-0601-4706-b0d_ubQ7cdA.jpg
     """
-    user_dir_path = settings.MEDIA_ROOT + "/postpic/" + str(self.exhibit_id.owner.id) + "/" + str(self.exhibit_id.id)
-    if not os.path.exists(user_dir_path):
-        os.makedirs(user_dir_path)
+    if not settings.DEBUG:
+        user_dir_path = "/postpic/" + str(self.exhibit_id.owner.id) + "/" + str(self.exhibit_id.id)
+    else:
+        media_dir_path = settings.MEDIA_ROOT + "/postpic/" + str(self.exhibit_id.owner.id) + "/" + str(self.exhibit_id.id)
+        if not os.path.exists(media_dir_path):
+            os.makedirs(media_dir_path)
+        user_dir_path = "./postpic/" + str(self.exhibit_id.owner.id) + "/" + str(self.exhibit_id.id)
     return user_dir_path + "/" + str(self.id) + '.jpg'
 
 
 def get_thumbnail_path(self, filename):
     """
-        ユーザーごとにthumbnailフォルダパスを変更
+        本番環境: https://startlens-media-storage.s3-ap-northeast-1.amazonaws.com/thumbnail/2200001/2200001.jpg
+        開発環境: setting.MEDIA_ROOT/thumbnail/2200001/2200001.jpg
     """
     if not settings.DEBUG:
-        # user_dir_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/" + str(self.id)
         user_dir_path = "/thumbnail/" + str(self.id)
     else:
         media_dir_path = settings.MEDIA_ROOT + "/thumbnail/" + str(self.id)
@@ -39,10 +44,10 @@ def get_thumbnail_path(self, filename):
 
 def set_default_thumbnail_path():
     """
-        ユーザー画像のデフォルトのアップロードパス
+        本番環境: https://startlens-media-storage.s3-ap-northeast-1.amazonaws.com/thumbnail/noimage.png
+        開発環境: setting.MEDIA_ROOT/thumbnail/noimage.png
     """
     if not settings.DEBUG:
-        # file_path = settings.AWS_CUSTOM_DOMAIN + "/thumbnail/noimage.png"
         file_path = "/thumbnail/noimage.png"
     else:
         file_path = './thumbnail/noimage.png'
@@ -51,7 +56,7 @@ def set_default_thumbnail_path():
 
 def get_userthumbnail_path(self, filename):
     """
-        モバイルユーザーごとにthumbnailフォルダパスを変更
+        モバイルユーザーのサムネイルアップロードパス
     """
     user_dir_path = settings.MEDIA_ROOT + "/userthumbnail/" + str(self.id)
     if not os.path.exists(user_dir_path):
@@ -62,10 +67,16 @@ def get_userthumbnail_path(self, filename):
 def get_infference_model_path(self, filename):
     """
         各事業所ごとにknn推論モデルとexhibitのcsvファイルを格納するパス
+        本番環境: https://startlens-media-storage.s3-ap-northeast-1.amazonaws.com/infference/2200001/knn_model_2200001_20200_ZbNAXy8.pkl
+        開発環境: setting.MEDIA_ROOT/infference/2200001/knn_model_2200001_20200_ZbNAXy8.pkl
     """
-    user_dir_path = settings.MEDIA_ROOT + "/infference/" + str(self.id)
-    if not os.path.exists(user_dir_path):
-        os.makedirs(user_dir_path)
+    if not settings.DEBUG:
+        user_dir_path = "/infference/" + str(self.id)
+    else:
+        media_dir_path = settings.MEDIA_ROOT + "/infference/" + str(self.id)
+        if not os.path.exists(media_dir_path):
+            os.makedirs(media_dir_path)
+        user_dir_path = "./infference/" + str(self.id)
     return user_dir_path + "/" + filename
 
 
@@ -223,9 +234,9 @@ class UserLang(models.Model):
 
     LANGUAGE_FIELD_CHOICE = [
         ('NA', ''),
-        ('en', 'English'),
-        ('zh', 'Chinese'),
-        ('ko', 'Korea')
+        ('en', '英語'),
+        ('zh', '中国語'),
+        ('ko', '韓国語')
     ]
 
     owner = models.ForeignKey(User, on_delete=models.PROTECT)
