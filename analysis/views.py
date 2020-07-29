@@ -61,11 +61,13 @@ class UploadView(LoginRequiredMixin, ListView):
     def post(self, request, *args, **kwargs):
         self.object = None
         self.object_list = self.get_queryset()
-        # form = self.get_form()
-        # 対象物の名前説明と投稿画像フォームを別で処理
+        print("request: {}".format(request))
         post_data = request.POST or None
+        print("post_data: {}".format(post_data))
         exhibit_form = self.exhibit_form_class(post_data, prefix='exhibit')
+        print("exhibit_form: {}".format(exhibit_form))
         picture_form = self.picture_form_class(post_data, request.FILES, prefix='picture')
+        print("picture_form: {}".format(picture_form))
         context = self.get_context_data(exhibit_form=exhibit_form, picture_form=picture_form)
 
         if exhibit_form.is_valid():
