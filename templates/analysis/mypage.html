@@ -42,14 +42,6 @@
                                         {{ form.username }}
                                     </div>
                                 </div>
-                                <!--
-                                <div class="form-group row">
-                                    <label for="obj_description" class="col-2 col-form-label">分類</label>
-                                    <div class="col-8">
-                                        {{ form.major_category }}
-                                    </div>
-                                </div>
-                                -->
                                 <div class="form-group row">
                                     <label for="obj_description" class="col-2 col-form-label">説明</label>
                                     <div class="col-8">
@@ -138,14 +130,6 @@
                                         {{ form.self_intro }}
                                     </div>
                                 </div>
-                                <!--
-                                <div class="form-group row">
-                                    <label for="obj_description" class="col-2 col-form-label">分類</label>
-                                    <div class="col-8">
-                                        {{ form.major_category }}
-                                    </div>
-                                </div>
-                                -->
                                 <div class="form-group row">
                                     <label for="obj_description" class="col-2 col-form-label">説明</label>
                                     <div class="col-8">
@@ -314,37 +298,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- 
-            <table class="table mypage_detail_table">
-                <tbody>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">分類項目</th>
-                        <td class="mypage_detail_content">{{ user.major_category }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">所在地</th>
-                        <td class="mypage_detail_content">{{ user.address }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">電話番号</th>
-                        <td class="mypage_detail_content">{{ user.telephone }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">料金</th>
-                        <td class="mypage_detail_content">{{ user.entrance_fee }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">祝祭日</th>
-                        <td class="mypage_detail_content">{{ user.holiday }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="mypage_detail_title">営業時間</th>
-                        <td class="mypage_detail_content">{{ user.business_hours }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            -->
         </div>
         <div class="col-4">
         </div>
@@ -359,6 +312,7 @@ $(function(){
         e.preventDefault();
         var that = this;
         userlang_pk = $(that).prev('.hidden').text();
+        console.log(userlang_pk)
 
         // AJAX
         $.ajax({
@@ -371,14 +325,15 @@ $(function(){
             success: function(data){
                 console.log(data);
                 $('#userlangeditModal').find('input[name="userlang_pk"]').val(data.userlang_pk);
-                $('#userlangeditModal').find('#userlang_laguage').val(data.userlang_language);
-                $('#userlangeditModal').find('#userlang_username').val(data.userlang_username);
-                $('#userlangeditModal').find('#userlang_self_intro').val(data.userlang_self_intro);
-                //$('#userlangeditModal').find('#userlang_major_category').val(data.userlang_major_category);
-                $('#userlangeditModal').find('#userlang_address').val(data.userlang_address);
-                $('#userlangeditModal').find('#userlang_entrance_fee').val(data.userlang_entrance_fee);
-                $('#userlangeditModal').find('#userlang_business_hours').val(data.userlang_business_hours);
-                $('#userlangeditModal').find('#userlang_holiday').val(data.userlang_holiday);
+                $('#userlangeditModal').find('.userlang_laguage').val(data.userlang_language);
+                $('#userlangeditModal').find('.userlang_username').val(data.userlang_username);
+                $('#userlangeditModal').find('.userlang_self_intro').val(data.userlang_self_intro);
+                $('#userlangeditModal').find('.userlang_address_prefecture').val(data.userlang_address_prefecture);
+                $('#userlangeditModal').find('.userlang_address_city').val(data.userlang_address_city);
+                $('#userlangeditModal').find('.userlang_address_street').val(data.userlang_address_street);
+                $('#userlangeditModal').find('.userlang_entrance_fee').val(data.userlang_entrance_fee);
+                $('#userlangeditModal').find('.userlang_business_hours').val(data.userlang_business_hours);
+                $('#userlangeditModal').find('.userlang_holiday').val(data.userlang_holiday);
             },
         })
     });

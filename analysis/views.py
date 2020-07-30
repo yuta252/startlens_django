@@ -72,13 +72,13 @@ class UploadView(LoginRequiredMixin, ListView):
 
         if exhibit_form.is_valid():
             exhibit_pk = self.exhibit_form_save(exhibit_form)
+            if picture_form.is_valid():
+                self.picture_form_save(picture_form, exhibit_pk)
+            else:
+                print("picture_form.is_valid is not True")
         else:
             print("exihibit_form.is_valid is not True")
-        # TODO: is_valid()エラー時の処理
-        if picture_form.is_valid():
-            self.picture_form_save(picture_form, exhibit_pk)
-        else:
-            print("picture_form.is_valid is not True")
+            print(exhibit_form.errors.items())
 
         return self.render_to_response(context)
 
@@ -86,6 +86,7 @@ class UploadView(LoginRequiredMixin, ListView):
         """
             exibit_formのバリデーションがTrueの場合、対象物を保存してprimarykeyを返す
         """
+        print("exhibit_form_save is called")
         owner = self.request.user
         obj = form.save(commit=False)
         obj.owner = owner
@@ -101,6 +102,7 @@ class UploadView(LoginRequiredMixin, ListView):
         """
             複数ファイルを保存する処理
         """
+        print("picture_form_save is called")
         portfolio_images = self.request.FILES.getlist('picture-post_pic')
         for image in portfolio_images:
             logger.info("image: {}".format(image))
@@ -228,14 +230,15 @@ class UserLangEditAJAXView(View):
 
         data = {
             'userlang_pk': userlang_pk,
-            'userlang_language':obj.language,
+            'userlang_language': obj.language,
             'userlang_username': obj.username,
             'userlang_self_intro': obj.self_intro,
-            # 'userlang_major_category':obj.major_category,
-            'userlang_address':obj.address,
-            'userlang_entrance_fee':obj.entrance_fee,
-            'userlang_business_hours':obj.business_hours,
-            'userlang_holiday':obj.holiday,
+            'userlang_address_prefecture': obj.address_prefecture,
+            'userlang_address_city': obj.address_city,
+            'userlang_address_street': obj.address_street,
+            'userlang_entrance_fee': obj.entrance_fee,
+            'userlang_business_hours': obj.business_hours,
+            'userlang_holiday': obj.holiday,
         }
         data = json.dumps(data)
         return HttpResponse(data, content_type='application/json')
