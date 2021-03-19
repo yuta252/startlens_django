@@ -10,7 +10,7 @@ gunicorn==20.0.4
 jmespath==0.10.0
 mysqlclient==2.0.1
 pilkit==2.0
-Pillow==6.2.2
+Pillow==8.1.1
 python-dateutil==2.8.1
 pytz==2020.1
 s3transfer==0.3.3
